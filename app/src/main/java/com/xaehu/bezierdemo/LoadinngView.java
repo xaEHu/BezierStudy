@@ -46,6 +46,8 @@ public class LoadinngView extends SurfaceView implements SurfaceHolder.Callback,
     private float distance;
     private float distance_temp;
     private float freeDownDistance;
+    //线粗
+    private float lineStroke;
     //半径
     private float r;
 
@@ -67,10 +69,11 @@ public class LoadinngView extends SurfaceView implements SurfaceHolder.Callback,
         ballPaint.setAntiAlias(true);
         linePaint = new Paint();
         linePaint.setAntiAlias(true);
-        linePaint.setStrokeWidth(3);
+        lineStroke = 3;
+        linePaint.setStrokeWidth(lineStroke);
         linePaint.setStyle(Paint.Style.STROKE);
         lineWidth = 300;
-        distance = 50;
+        distance = 80;
         r = 20;
 
         initControl();
@@ -152,19 +155,16 @@ public class LoadinngView extends SurfaceView implements SurfaceHolder.Callback,
         try {
             if (canvas != null) {
                 canvas.drawColor(Color.WHITE);
-                //贝塞尔曲线 + 中间小球
+                //贝塞尔曲线
                 ballPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                 path.reset();
                 path.moveTo((float) (getWidth() / 2) - lineWidth / 2, (float) (getHeight() / 2));
-                if (loadingState == STATE_DOWN) {
-                    path.rQuadTo(lineWidth / 2, distance_temp * 2, lineWidth, 0);
-                    canvas.drawCircle((float) (getWidth() / 2), (float) (getHeight() / 2) + distance_temp - r, r, ballPaint);
-                } else if (loadingState == STATE_UP) {
-                    path.rQuadTo(lineWidth / 2, distance_temp * 2, lineWidth, 0);
-                    canvas.drawCircle((float) (getWidth() / 2), (float) (getHeight() / 2) + distance_temp - r, r, ballPaint);
-                } else if (loadingState == STATE_FREE) {
-                    path.rQuadTo(lineWidth / 2, distance_temp * 2, lineWidth, 0);
+                path.rQuadTo(lineWidth / 2, distance_temp * 2 + lineStroke, lineWidth, 0);
+                //中间小球
+                if (loadingState == STATE_FREE) {
                     canvas.drawCircle((float) (getWidth() / 2), (float) (getHeight() / 2) - freeDownDistance - r, r, ballPaint);
+                }else{
+                    canvas.drawCircle((float) (getWidth() / 2), (float) (getHeight() / 2) + distance_temp - r, r, ballPaint);
                 }
                 canvas.drawPath(path, linePaint);
                 //两边小球
@@ -202,6 +202,11 @@ public class LoadinngView extends SurfaceView implements SurfaceHolder.Callback,
     public void run() {
         while (isRun) {
             drawLoadingView();
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -17,7 +17,6 @@ import android.view.View;
  */
 public class BesselView extends View {
 
-    private final String TAG = "myout";
     private final int POINT_START = 0;
     private final int POINT_CENTER = 3;
     private final int POINT_END = 1;
@@ -50,7 +49,7 @@ public class BesselView extends View {
         ctrlY = 500;
         touchX = 300;
         touchY = 500;
-        r = 10;
+        r = 20;
         path = new Path();
     }
 
